@@ -1,13 +1,20 @@
+import Card from './Card'
 import ExpenseItem from './ExpenseItem'
 import './ExpenseList.css'
 
 function ExpenseList ({ expenses }) {
   return (
-    <div className='expenses'>
+    <Card className='expenses'>
       {
-        expenses.map(expense => <ExpenseItem key={expense.id} date={expense.date} amount={expense.amount} title={expense.title} />)
+        expenses.map(expense =>
+          <ExpenseItem
+            key={expense.id}
+            date={expense.date}
+            amount={expense.amount}
+            title={expense.title}
+          />)
       }
-    </div>
+    </Card>
   )
 }
 
