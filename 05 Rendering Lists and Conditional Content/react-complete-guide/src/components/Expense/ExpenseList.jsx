@@ -9,7 +9,7 @@ const ExpenseList = ({ expenses }) => {
   const [yearFilter, setYearFilter] = useState('2020')
 
   const yearSelectionHandler = (year) => {
-    setYearFilter(Number(year))
+    setYearFilter(year)
   }
 
   return (
@@ -18,7 +18,7 @@ const ExpenseList = ({ expenses }) => {
       {
         expenses
           .filter(expense => {
-            return yearFilter === 0 || expense.date.getFullYear() === yearFilter
+            return expense.date.getFullYear().toString() === yearFilter
           })
           .map(expense =>
             <ExpenseItem
