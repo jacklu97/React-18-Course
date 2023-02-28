@@ -46,7 +46,8 @@ const ExpenseForm = ({ onSaveExpenseData, onCancel }) => {
 
     onSaveExpenseData({
       ...userInput,
-      date: new Date(userInput.date)
+      date: new Date(userInput.date),
+      amount: Number(userInput.amount)
     })
 
     resetFields()
