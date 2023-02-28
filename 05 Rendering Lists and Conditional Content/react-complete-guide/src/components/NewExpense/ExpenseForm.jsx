@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './ExpenseForm.css'
 
-const ExpenseForm = ({ onSaveExpenseData }) => {
+const ExpenseForm = ({ onSaveExpenseData, onCancel }) => {
   // Multiple states approach
   // const [title, setTitle] = useState('')
   // const [amount, setAmount] = useState('')
@@ -15,7 +15,7 @@ const ExpenseForm = ({ onSaveExpenseData }) => {
   })
 
   const titleChangeHandler = (e) => {
-    setUserInput(prev => {
+    setUserInput((prev) => {
       return {
         ...prev,
         title: e.target.value
@@ -24,7 +24,7 @@ const ExpenseForm = ({ onSaveExpenseData }) => {
   }
 
   const amountChangeHandler = (e) => {
-    setUserInput(prev => {
+    setUserInput((prev) => {
       return {
         ...prev,
         amount: e.target.value
@@ -33,7 +33,7 @@ const ExpenseForm = ({ onSaveExpenseData }) => {
   }
 
   const dateChangeHandler = (e) => {
-    setUserInput(prev => {
+    setUserInput((prev) => {
       return {
         ...prev,
         date: e.target.value
@@ -49,15 +49,21 @@ const ExpenseForm = ({ onSaveExpenseData }) => {
       date: new Date(userInput.date)
     })
 
+    resetFields()
+  }
+
+  const cancelHandler = () => {
+    resetFields()
+    onCancel()
+  }
+
+  const resetFields = () => {
     setUserInput(
-      Object
-        .keys(userInput)
-        .reduce(
-          (acc, current) => {
-            acc[current] = ''
-            return acc
-          }, {}
-        ))
+      Object.keys(userInput).reduce((acc, current) => {
+        acc[current] = ''
+        return acc
+      }, {})
+    )
   }
 
   return (
@@ -65,19 +71,38 @@ const ExpenseForm = ({ onSaveExpenseData }) => {
       <div className='new-expense__controls'>
         <div className='new-expense__control'>
           <label>Title</label>
-          <input type='text' value={userInput.title} onChange={titleChangeHandler} />
+          <input
+            type='text'
+            value={userInput.title}
+            onChange={titleChangeHandler}
+          />
         </div>
         <div className='new-expense__control'>
           <label>Amount</label>
-          <input type='number' min='0.01' step='0.01' value={userInput.amount} onChange={amountChangeHandler} />
+          <input
+            type='number'
+            min='0.01'
+            step='0.01'
+            value={userInput.amount}
+            onChange={amountChangeHandler}
+          />
         </div>
         <div className='new-expense__control'>
           <label>Date</label>
-          <input type='date' min='2019-01-01' max='2022-12-31' value={userInput.date} onChange={dateChangeHandler} />
+          <input
+            type='date'
+            min='2019-01-01'
+            max='2022-12-31'
+            value={userInput.date}
+            onChange={dateChangeHandler}
+          />
         </div>
       </div>
       <div className='new-expense__actions'>
-        <button>Add Expense</button>
+        <button type='button' onClick={cancelHandler}>
+          Cancel
+        </button>
+        <button type='submit'>Add Expense</button>
       </div>
     </form>
   )
