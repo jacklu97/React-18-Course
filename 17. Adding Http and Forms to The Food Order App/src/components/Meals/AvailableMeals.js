@@ -8,7 +8,7 @@ import classes from './AvailableMeals.module.css';
 
 const AvailableMeals = () => {
   const [availableMeals, setAvailableMeals] = useState([])
-  const { sendRequest } = useHttp()
+  const { sendRequest, isLoading, error } = useHttp()
 
   useEffect(() => {
     sendRequest({}, (meals) => {
@@ -34,6 +34,18 @@ const AvailableMeals = () => {
       price={meal.price}
     />
   ));
+
+  if (isLoading) {
+    return <section className={classes.mealsLoading}>
+      <p>Loading. . .</p>
+    </section>
+  }
+
+  if (error) {
+    return <section className={classes.mealsError}>
+      <p>{error}</p>
+    </section>
+  }
 
   return (
     <section className={classes.meals}>
