@@ -11,7 +11,7 @@ const AvailableMeals = () => {
   const { sendRequest, isLoading, error } = useHttp()
 
   useEffect(() => {
-    sendRequest({}, (meals) => {
+    sendRequest({url: 'meals'}, (meals) => {
       const fixedMeals = []
       for (const [key, value] of Object.entries(meals)) {
         fixedMeals.push({

@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-const BACKED_ENDPOINT = "https://react-http-c1c44-default-rtdb.firebaseio.com/meals.json"
+const BACKED_ENDPOINT = "https://react-http-c1c44-default-rtdb.firebaseio.com/"
 
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +11,15 @@ const useHttp = () => {
     setError(null);
 
     try {
-      const response = await fetch(requestConfig.url ?? BACKED_ENDPOINT, {
+      if (!requestConfig.url) {
+        throw new Error('Url not defined')
+      }
+
+      const url = BACKED_ENDPOINT + requestConfig.url + ".json"
+
+      console.log(url)
+
+      const response = await fetch(url, {
         method: requestConfig.method ?? "GET",
         headers: requestConfig.headers ?? {},
         body: requestConfig.body ? JSON.stringify(requestConfig.body) : null,
