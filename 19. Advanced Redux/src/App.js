@@ -5,7 +5,7 @@ import Cart from "./components/Cart/Cart";
 import Layout from "./components/Layout/Layout";
 import Products from "./components/Shop/Products";
 import Notification from "./components/UI/Notification";
-import { uiActions } from "./store/ui-slice";
+import { sendCartData, fetchCartData } from "./store/cart-actions";
 
 let isInitial = true;
 
@@ -17,48 +17,65 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(fetchCartData())
+  }, [dispatch])
+
+  // Usage of action creators, this keeps the component lean
+  useEffect(() => {
     if (isInitial) {
       isInitial = false;
-      return;
+      return
     }
-
-    dispatch(
-      uiActions.showNotification({
-        status: "pending",
-        title: "Sending...",
-        message: "Sending cart data!",
-      })
-    );
-
-    fetch("https://react-http-c1c44-default-rtdb.firebaseio.com/cart.json", {
-      method: "PUT",
-      body: JSON.stringify(cart),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Sending cart data failed");
-        }
-        response.json();
-      })
-      .then(() => {
-        dispatch(
-          uiActions.showNotification({
-            status: "success",
-            title: "Success!",
-            message: "Success!",
-          })
-        );
-      })
-      .catch(() => {
-        dispatch(
-          uiActions.showNotification({
-            status: "error",
-            title: "Error!",
-            message: "Sending cart data failed!",
-          })
-        );
-      });
+    
+    if (cart.changed) {
+      dispatch(sendCartData(cart))
+    }
   }, [cart, dispatch]);
+
+  // Usage of useEffect with redux for state update on the server
+  // useEffect(() => {
+  //   if (isInitial) {
+  //     isInitial = false;
+  //     return;
+  //   }
+
+  //   dispatch(
+  //     uiActions.showNotification({
+  //       status: "pending",
+  //       title: "Sending...",
+  //       message: "Sending cart data!",
+  //     })
+  //   );
+
+  //   fetch("https://react-http-c1c44-default-rtdb.firebaseio.com/cart.json", {
+  //     method: "PUT",
+  //     body: JSON.stringify(cart),
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error("Sending cart data failed");
+  //       }
+  //       response.json();
+  //     })
+  //     .then(() => {
+  //       dispatch(
+  //         uiActions.showNotification({
+  //           status: "success",
+  //           title: "Success!",
+  //           message: "Success!",
+  //         })
+  //       );
+  //     })
+  //     .catch(() => {
+  //       dispatch(
+  //         uiActions.showNotification({
+  //           status: "error",
+  //           title: "Error!",
+  //           message: "Sending cart data failed!",
+  //         })
+  //       );
+  //     });
+  // }, [cart, dispatch]);
 
   return (
     <>
